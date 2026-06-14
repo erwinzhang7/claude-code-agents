@@ -562,6 +562,7 @@ function pctColor(p) {
   if (p >= 70) return "yellow";
   return "green";
 }
+var pct = (p) => p == null ? "\u2014" : `${Math.round(p)}`;
 function UsageLine({ rl, now }) {
   if (!rl || rl.fiveHourPct == null && rl.weekPct == null) {
     return /* @__PURE__ */ jsx3(Text3, { dimColor: true, children: "usage: waiting for statusline data (keep a Claude session open)" });
@@ -570,7 +571,7 @@ function UsageLine({ rl, now }) {
   return /* @__PURE__ */ jsxs3(Box3, { children: [
     /* @__PURE__ */ jsx3(Text3, { dimColor: true, children: "5hr:" }),
     /* @__PURE__ */ jsxs3(Text3, { color: pctColor(rl.fiveHourPct), children: [
-      rl.fiveHourPct ?? "\u2014",
+      pct(rl.fiveHourPct),
       "%"
     ] }),
     /* @__PURE__ */ jsxs3(Text3, { dimColor: true, children: [
@@ -579,7 +580,7 @@ function UsageLine({ rl, now }) {
     ] }),
     /* @__PURE__ */ jsx3(Text3, { dimColor: true, children: "      wk:" }),
     /* @__PURE__ */ jsxs3(Text3, { color: pctColor(rl.weekPct), children: [
-      rl.weekPct ?? "\u2014",
+      pct(rl.weekPct),
       "%"
     ] }),
     /* @__PURE__ */ jsxs3(Text3, { dimColor: true, children: [
@@ -719,10 +720,11 @@ async function once() {
     );
   }
   const rl = readRateLimits();
+  const pct2 = (p) => p == null ? "\u2014" : Math.round(p);
   if (rl && (rl.fiveHourPct != null || rl.weekPct != null)) {
     console.log(
       `
-5hr:${rl.fiveHourPct ?? "\u2014"}%   resets:${until(rl.fiveHourResetsAt)}      wk:${rl.weekPct ?? "\u2014"}%   resets:${until(rl.weekResetsAt)}`
+5hr:${pct2(rl.fiveHourPct)}%   resets:${until(rl.fiveHourResetsAt)}      wk:${pct2(rl.weekPct)}%   resets:${until(rl.weekResetsAt)}`
     );
   }
 }

@@ -57,10 +57,11 @@ async function once() {
   }
 
   const rl = readRateLimits();
+  const pct = (p?: number | null) => (p == null ? "—" : Math.round(p));
   if (rl && (rl.fiveHourPct != null || rl.weekPct != null)) {
     console.log(
-      `\n5hr:${rl.fiveHourPct ?? "—"}%   resets:${until(rl.fiveHourResetsAt)}` +
-        `      wk:${rl.weekPct ?? "—"}%   resets:${until(rl.weekResetsAt)}`
+      `\n5hr:${pct(rl.fiveHourPct)}%   resets:${until(rl.fiveHourResetsAt)}` +
+        `      wk:${pct(rl.weekPct)}%   resets:${until(rl.weekResetsAt)}`
     );
   }
 }

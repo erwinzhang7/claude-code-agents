@@ -10,6 +10,8 @@ function pctColor(p?: number): string | undefined {
   return "green";
 }
 
+const pct = (p?: number | null) => (p == null ? "—" : `${Math.round(p)}`);
+
 export function UsageLine({ rl, now }: { rl: RateLimits | null; now: number }) {
   if (!rl || (rl.fiveHourPct == null && rl.weekPct == null)) {
     return (
@@ -23,10 +25,10 @@ export function UsageLine({ rl, now }: { rl: RateLimits | null; now: number }) {
   return (
     <Box>
       <Text dimColor>5hr:</Text>
-      <Text color={pctColor(rl.fiveHourPct)}>{rl.fiveHourPct ?? "—"}%</Text>
+      <Text color={pctColor(rl.fiveHourPct)}>{pct(rl.fiveHourPct)}%</Text>
       <Text dimColor>   resets:{until(rl.fiveHourResetsAt, now)}</Text>
       <Text dimColor>      wk:</Text>
-      <Text color={pctColor(rl.weekPct)}>{rl.weekPct ?? "—"}%</Text>
+      <Text color={pctColor(rl.weekPct)}>{pct(rl.weekPct)}%</Text>
       <Text dimColor>   resets:{until(rl.weekResetsAt, now)}</Text>
       {stale ? <Text dimColor> (stale)</Text> : null}
     </Box>
