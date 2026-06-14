@@ -743,6 +743,19 @@ In the TUI:
 } else if (args.includes("--once") || args.includes("-1")) {
   once().then(() => process.exit(0));
 } else {
+  const enter = "\x1B[?1049h\x1B[?25l\x1B[?1000h\x1B[?1006h";
+  const leave = "\x1B[?1006l\x1B[?1000l\x1B[?25h\x1B[?1049l";
+  process.stdout.write(enter);
+  let restored = false;
+  const restore = () => {
+    if (restored) return;
+    restored = true;
+    process.stdout.write(leave);
+  };
+  process.on("exit", restore);
   const { waitUntilExit } = render(/* @__PURE__ */ jsx5(App, {}));
-  waitUntilExit().then(() => process.exit(0));
+  waitUntilExit().then(() => {
+    restore();
+    process.exit(0);
+  });
 }

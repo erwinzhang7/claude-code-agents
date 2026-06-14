@@ -82,10 +82,24 @@ In the TUI:
 } else if (args.includes("--once") || args.includes("-1")) {
   once().then(() => process.exit(0));
 } else {
-  // Render in the main buffer (not the alternate screen) so the terminal keeps
-  // its scrollback — you can scroll up to see what was there before, and the
-  // final frame stays on screen after exit. Ink redraws its block in place each
-  // tick and exits on Ctrl-C. This matches how Claude Code's own UI behaves.
+  // Lock the terminal to the app like Claude Code: alternate screen (takes over
+  // the whole terminal, restores on exit) + mouse reporting so the terminal
+  // forwards the wheel to us instead of scrolling its own scrollback — you can't
+  // accidentally scroll out. Hide the cursor while we run.
+  const enter = "\x1b[?1049h\x1b[?25l\x1b[?1000h\x1b[?1006h";
+  const leave = "\x1b[?1006l\x1b[?1000l\x1b[?25h\x1b[?1049l";
+  process.stdout.write(enter);
+  let restored = false;
+  const restore = () => {
+    if (restored) return;
+    restored = true;
+    process.stdout.write(leave);
+  };
+  process.on("exit", restore);
+
   const { waitUntilExit } = render(<App />);
-  waitUntilExit().then(() => process.exit(0));
+  waitUntilExit().then(() => {
+    restore();
+    process.exit(0);
+  });
 }
