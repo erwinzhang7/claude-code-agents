@@ -82,23 +82,10 @@ In the TUI:
 } else if (args.includes("--once") || args.includes("-1")) {
   once().then(() => process.exit(0));
 } else {
-  // Take over the screen like a full-screen TUI: switch to the alternate buffer,
-  // hide the cursor, and restore everything on exit. Exit with Ctrl-C.
-  const enterAlt = () => process.stdout.write("\x1b[?1049h\x1b[?25l\x1b[H");
-  const leaveAlt = () => process.stdout.write("\x1b[?25h\x1b[?1049l");
-
-  enterAlt();
-  let restored = false;
-  const restore = () => {
-    if (restored) return;
-    restored = true;
-    leaveAlt();
-  };
-  process.on("exit", restore);
-
+  // Render in the main buffer (not the alternate screen) so the terminal keeps
+  // its scrollback — you can scroll up to see what was there before, and the
+  // final frame stays on screen after exit. Ink redraws its block in place each
+  // tick and exits on Ctrl-C. This matches how Claude Code's own UI behaves.
   const { waitUntilExit } = render(<App />);
-  waitUntilExit().then(() => {
-    restore();
-    process.exit(0);
-  });
+  waitUntilExit().then(() => process.exit(0));
 }
