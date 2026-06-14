@@ -1,0 +1,56 @@
+{
+  "name": "claude-code-agents",
+  "version": "0.1.0",
+  "description": "Live terminal dashboard for your running Claude Code sessions — status, task, context, cost, and subscription limits at a glance.",
+  "type": "module",
+  "bin": {
+    "agents": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/cli.tsx",
+    "start": "node dist/cli.js"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "tui",
+    "terminal",
+    "dashboard",
+    "cli",
+    "monitor",
+    "ink",
+    "agents",
+    "sessions"
+  ],
+  "author": "Erwin Zhang",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erwinzhang7/claude-code-agents.git"
+  },
+  "homepage": "https://github.com/erwinzhang7/claude-code-agents#readme",
+  "bugs": {
+    "url": "https://github.com/erwinzhang7/claude-code-agents/issues"
+  },
+  "dependencies": {
+    "clipboardy": "^4.0.0",
+    "ink": "^5.1.0",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.21",
+    "@types/react": "^18.3.12",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
